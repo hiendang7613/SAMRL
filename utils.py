@@ -1,5 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
+from tqdm.auto import tqdm
+import cv2
 
 def show_masks(images, masks):
   ncols=3
@@ -34,5 +36,20 @@ def show_anns(ax, anns):
     
     ax.imshow(img)
 
-
+def save_segments(data_dir, images, img_masks):
+  max_k = sum([ len(masks) for masks in img_masks])
+  with tqdm(total=max_k, leave=False) as step:
+    for image, masks in zip(images, img_masks):
+      for k, mask in enumerate(masks):
+        new_image = np.expand_dims(mask['segmentation'],-1)*image
+        coord_x = np.sum(masks[k]['segmentation'],axis=1)
+        x_min, x_max = np.where(coord_x>0)[0][0], np.where(coord_x>0)[0][-1]
+        coord_y = np.sum(masks[k]['segmentation'],axis=0)
+        y_min, y_max = np.where(coord_y>0)[0][0], np.where(coord_y>0)[0][-1]
+        new_image = new_image[x_min: x_max, y_min: y_max]
+        output_path = data_dir + 'unknow/' + str(step.n) + '.png'
+        new_image = cv2.cvtColor(new_image, cv2.COLOR_RGBA2BGRA)
+        cv2.imwrite(output_path, new_image)
+        step.update(1)
+  print(f"Saved {max_k} images to {data_dir}.")
 
