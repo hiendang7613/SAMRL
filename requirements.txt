@@ -1,0 +1,5 @@
+segment_anything
+transformers
+opencv-python matplotlib
+clip @ git@https://github.com/openai/CLIP.git
+
