@@ -54,7 +54,7 @@ def save_segments(data_dir, images, img_masks):
         step.update(1)
   print(f"Saved {max_k} images to {data_dir}.")
 
-def get_embeddings(dataset, clip_model):
+def get_embeddings(dataset, clip_model, device='cuda'):
   embeddings = []
   labels = []
   paths = []
