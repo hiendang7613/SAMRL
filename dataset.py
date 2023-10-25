@@ -2,7 +2,7 @@ from torchvision import datasets
 import os 
 
 class ImageFolderWithPaths(datasets.ImageFolder):
-    def __init__(self, data_dir,transform, device='cuda'):
+    def __init__(self, data_dir,transform):
       super().__init__(data_dir,transform)
       new_indexes = sorted(range(len(self.imgs)), key=lambda k: int(os.path.basename(self.imgs[k][0]).split('.')[0]) )
       self.imgs = [self.imgs[i] for i in new_indexes]
