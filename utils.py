@@ -53,3 +53,17 @@ def save_segments(data_dir, images, img_masks):
         step.update(1)
   print(f"Saved {max_k} images to {data_dir}.")
 
+def get_embeddings(dataset, clip_model):
+  embeddings = []
+  labels = []
+  paths = []
+  for image, label, path in tqdm(dataset):
+      with torch.no_grad():
+        outputs = clip_model.encode_image(image.unsqueeze(0).to(device))
+      embeddings.append(outputs)
+      labels.append(label)
+      paths.append(path)
+  embeddings = torch.cat(embeddings, dim=0)
+  labels = torch.tensor(labels, dtype=torch.int32)
+  return embeddings, labels, paths
+
