@@ -1,4 +1,5 @@
 from torchvision import datasets
+import os 
 
 class ImageFolderWithPaths(datasets.ImageFolder):
     def __init__(self, data_dir,transform):
