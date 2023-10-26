@@ -16,7 +16,6 @@ class SAM:
           urllib.request.urlretrieve(checkpoint_url, checkpoint_filename)
       self.sam = sam_model_registry[model_type](checkpoint=checkpoint_filename).to(device=device)
       self.mask_generator = SamAutomaticMaskGenerator(self.sam)
-      self.predictor = SamPredictor(self.sam, self.mask_generator)
     def segment(self, images):
       masks = []
       for image in images:
